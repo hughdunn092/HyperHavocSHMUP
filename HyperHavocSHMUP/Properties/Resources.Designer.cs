@@ -239,5 +239,23 @@ namespace HyperHavocSHMUP.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream gameplaymusic {
+            get {
+                return ResourceManager.GetStream("gameplaymusic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream titlemusic {
+            get {
+                return ResourceManager.GetStream("titlemusic", resourceCulture);
+            }
+        }
     }
 }

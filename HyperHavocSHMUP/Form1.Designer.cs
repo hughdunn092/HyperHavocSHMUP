@@ -37,6 +37,7 @@
             this.backLabel2 = new System.Windows.Forms.Label();
             this.backLabel3 = new System.Windows.Forms.Label();
             this.backLabel4 = new System.Windows.Forms.Label();
+            this.introTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // titleLabel
@@ -70,12 +71,13 @@
             // 
             // backLabel1
             // 
+            this.backLabel1.AutoSize = true;
             this.backLabel1.BackColor = System.Drawing.Color.Transparent;
             this.backLabel1.Font = new System.Drawing.Font("OCR A Extended", 40F, System.Drawing.FontStyle.Bold);
             this.backLabel1.ForeColor = System.Drawing.Color.DarkSlateBlue;
-            this.backLabel1.Location = new System.Drawing.Point(4, 100);
+            this.backLabel1.Location = new System.Drawing.Point(292, 100);
             this.backLabel1.Name = "backLabel1";
-            this.backLabel1.Size = new System.Drawing.Size(1160, 80);
+            this.backLabel1.Size = new System.Drawing.Size(574, 83);
             this.backLabel1.TabIndex = 2;
             this.backLabel1.Text = "HYPER HAVOC";
             this.backLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -106,15 +108,20 @@
             // 
             // backLabel4
             // 
+            this.backLabel4.AutoSize = true;
             this.backLabel4.BackColor = System.Drawing.Color.Transparent;
             this.backLabel4.Font = new System.Drawing.Font("OCR A Extended", 32F, System.Drawing.FontStyle.Bold);
             this.backLabel4.ForeColor = System.Drawing.Color.Indigo;
-            this.backLabel4.Location = new System.Drawing.Point(1, 35);
+            this.backLabel4.Location = new System.Drawing.Point(347, 34);
             this.backLabel4.Name = "backLabel4";
-            this.backLabel4.Size = new System.Drawing.Size(1176, 77);
+            this.backLabel4.Size = new System.Drawing.Size(468, 66);
             this.backLabel4.TabIndex = 5;
             this.backLabel4.Text = "HYPER HAVOC";
             this.backLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // introTimer
+            // 
+            this.introTimer.Interval = 20;
             // 
             // Form1
             // 
@@ -135,7 +142,9 @@
             this.Text = "HYPER HAVOC";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);            this.ResumeLayout(false);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -148,6 +157,7 @@
         private System.Windows.Forms.Label backLabel2;
         private System.Windows.Forms.Label backLabel3;
         private System.Windows.Forms.Label backLabel4;
+        private System.Windows.Forms.Timer introTimer;
     }
 }
 

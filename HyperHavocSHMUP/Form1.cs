@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 using System.Media;
 using System.Threading;
 
@@ -14,7 +15,10 @@ namespace HyperHavocSHMUP
 {
     public partial class Form1 : Form
     {
+        //System.Windows.Media.MediaPlayer titleMusic = new System.Windows.Media.MediaPlayer();
+
         string state = "waiting";
+
 
         int flightCounter = 0;
         int fireCounter = 0;
@@ -52,7 +56,7 @@ namespace HyperHavocSHMUP
         SolidBrush slateblueBrush = new SolidBrush(Color.DarkSlateBlue);
         SolidBrush indigoBrush = new SolidBrush(Color.Indigo);
 
-        int maxNovaSpeed = 10 ;
+        int maxNovaSpeed = 10;
         int attackSpeed = 25;
 
         //movement bools
@@ -75,7 +79,7 @@ namespace HyperHavocSHMUP
         //player movement
         Image flight1;
         Image flight2;
-        Image flight3;  
+        Image flight3;
         Image flight4;
         //base enemy model
         //Image enemy1;
@@ -92,8 +96,6 @@ namespace HyperHavocSHMUP
         {
             InitializeComponent();
 
-            //System.Windows.Media.MediaPlayer shmupMusic = new System.Windows.Media.MediaPlayer();
-
             //define player model
             playerBase1 = Properties.Resources._0;
             playerBase2 = Properties.Resources._2;
@@ -108,14 +110,15 @@ namespace HyperHavocSHMUP
             flight3 = Properties.Resources._7;
             flight4 = Properties.Resources._9;
 
+            //base animations
             playerIdle[0] = playerBase1;
             playerIdle[1] = playerBase2;
             playerIdle[2] = playerBase3;
-
+            //attack animations
             playerFire[0] = shoot1;
             playerFire[1] = shoot2;
             playerFire[2] = shoot3;
-
+            //movement animations
             playerFlight[0] = flight1;
             playerFlight[1] = flight2;
             playerFlight[2] = flight3;
@@ -127,18 +130,20 @@ namespace HyperHavocSHMUP
             //define screen filter
             filter = Properties.Resources.crt1200x600;
 
-            //Eliminate null variable
+            //eliminate null variable
             drawPlayer = playerBase1;
+
+            //titleMusic.Open(new Uri(Application.StartupPath + "/Resources/titlemusic.wav"));
+            //titleMusic.MediaEnded += new EventHandler(titleMusic_MediaEnded);
+            //titleMusic.Play();
+
         }
 
         public void InitializeGame()
         {
             BackColor = Color.Plum;
             maxNova = new Rectangle(100, 170, 40, 40);
-            //background1 = new Rectangle(5, 200, 90, 200);
-            //background2 = new Rectangle(95, 100, 90, 300);
-            //background3 = new Rectangle(185, 300, 165, 400);
-            //background4 = new Rectangle(270, 250, 80, 200);
+
 
             //baseEnemy = new Rectangle(200, 150, 20, 20);
 
@@ -153,6 +158,18 @@ namespace HyperHavocSHMUP
             //change game state and start engine
             state = "playing";
             gameTimer.Enabled = true;
+        }
+
+        public void InitializeIntro()
+        {
+            titleLabel.Text = "";
+            backLabel1.Text = "";
+            backLabel2.Text = "";
+            backLabel3.Text = "";
+            backLabel4.Text = "";
+            subtitleLabel.Text = "Press [Space] to Continue";
+
+            state = "intro";
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -176,7 +193,11 @@ namespace HyperHavocSHMUP
                     break;
 
                 case Keys.Space:
-                    if (state == "waiting" || state == "end")
+                    if(state == "waiting" || state == "end")
+                    {
+                        InitializeIntro();
+                    }
+                    if (state == "intro" || state == "end")
                     {
                         InitializeGame();
                     }
@@ -240,7 +261,7 @@ namespace HyperHavocSHMUP
                 flightCounter++;
 
                 if (flightCounter == 3)
-                { 
+                {
                     flightCounter = 0;
                 }
             }
@@ -256,7 +277,7 @@ namespace HyperHavocSHMUP
                 }
             }
             if (enterDown == true)
-            { 
+            {
                 drawPlayer = shoot1;
                 fireCounter++;
                 //recoil
@@ -272,9 +293,8 @@ namespace HyperHavocSHMUP
 
             }
 
-
             //redraw the screen
-            Refresh(); 
+            Refresh();
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -290,47 +310,57 @@ namespace HyperHavocSHMUP
                 subtitleLabel.Text = "Press [Space] to Play  Press [Esc] to Exit";
             }
 
-
-            if (state == "playing")
+            if (state == "intro")
             {
-                //e.Graphics.DrawImage(enemy1, baseEnemy);
 
-                //far buildings
-                e.Graphics.FillRectangle(indigoBrush, background1_3);
-                e.Graphics.FillRectangle(indigoBrush, background2_3);
-
-                //background buildings
-                e.Graphics.FillRectangle(slateblueBrush, background1_2);
-                e.Graphics.FillRectangle(slateblueBrush, background2_2);
-                e.Graphics.FillRectangle(slateblueBrush, background3_2);
-                e.Graphics.FillRectangle(slateblueBrush, background4_2);
-                e.Graphics.FillRectangle(slateblueBrush, background5_2);
-
-                //foreground buildings
-                e.Graphics.FillRectangle(violetBrush, background1);
-                e.Graphics.FillRectangle(violetBrush, background2);
-                e.Graphics.FillRectangle(violetBrush, background3);
-                e.Graphics.FillRectangle(violetBrush, background4); 
-                e.Graphics.FillRectangle(violetBrush, background5);
-                e.Graphics.FillRectangle(violetBrush, background6);
-                e.Graphics.FillRectangle(violetBrush, background7); 
-                e.Graphics.FillRectangle(violetBrush, background8);
-
-                e.Graphics.DrawImage(drawPlayer, maxNova);
-                drawPlayer = playerFlight[flightCounter];
-
-                if (enterDown == true)
-                { 
-                    drawPlayer = playerFire[fireCounter];
-                }
-
-                
             }
 
-            //drawing screen filter (keep at bottom)
-            e.Graphics.DrawImage(filter, screenFilter);
+            if (state == "playing")
+                {
+                    //e.Graphics.DrawImage(enemy1, baseEnemy);
+
+                    //far buildings
+                    e.Graphics.FillRectangle(indigoBrush, background1_3);
+                    e.Graphics.FillRectangle(indigoBrush, background2_3);
+
+                    //background buildings
+                    e.Graphics.FillRectangle(slateblueBrush, background1_2);
+                    e.Graphics.FillRectangle(slateblueBrush, background2_2);
+                    e.Graphics.FillRectangle(slateblueBrush, background3_2);
+                    e.Graphics.FillRectangle(slateblueBrush, background4_2);
+                    e.Graphics.FillRectangle(slateblueBrush, background5_2);
+
+                    //foreground buildings
+                    e.Graphics.FillRectangle(violetBrush, background1);
+                    e.Graphics.FillRectangle(violetBrush, background2);
+                    e.Graphics.FillRectangle(violetBrush, background3);
+                    e.Graphics.FillRectangle(violetBrush, background4);
+                    e.Graphics.FillRectangle(violetBrush, background5);
+                    e.Graphics.FillRectangle(violetBrush, background6);
+                    e.Graphics.FillRectangle(violetBrush, background7);
+                    e.Graphics.FillRectangle(violetBrush, background8);
+
+                    e.Graphics.DrawImage(drawPlayer, maxNova);
+                    drawPlayer = playerFlight[flightCounter];
+
+                    if (enterDown == true)
+                    {
+                        drawPlayer = playerFire[fireCounter];
+                    }
+
+                }
+
+                //drawing screen filter (keep at bottom)
+                e.Graphics.DrawImage(filter, screenFilter);
+
+            }
+
+            //private void titleMusic_MediaEnded(object sender, EventArgs e)
+            //{
+            //    titleMusic.Stop();
+            //    titleMusic.Play();
+            //}
 
         }
-    }
-}
 
+    }
