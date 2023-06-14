@@ -15,7 +15,8 @@ namespace HyperHavocSHMUP
 {
     public partial class Form1 : Form
     {
-        //System.Windows.Media.MediaPlayer titleMusic = new System.Windows.Media.MediaPlayer();
+        System.Windows.Media.MediaPlayer titleMusic = new System.Windows.Media.MediaPlayer();
+        System.Windows.Media.MediaPlayer gameMusic = new System.Windows.Media.MediaPlayer();
 
         string state = "waiting";
 
@@ -25,6 +26,8 @@ namespace HyperHavocSHMUP
 
         //player
         Rectangle maxNova = new Rectangle(100, 170, 40, 40);
+
+        List <Rectangle> shootList = new List <Rectangle>();
 
         //foreground buildings
         Rectangle background1 = new Rectangle(0, 200, 90, 200);
@@ -49,12 +52,13 @@ namespace HyperHavocSHMUP
 
 
         //Rectangle baseEnemy = new Rectangle(200, 150, 20, 20);
-        Rectangle screenFilter = new Rectangle(-3, 0, 803, 390);
+        Rectangle screenFilter = new Rectangle(-3, 0, 803, 400);
 
         //brushes
         SolidBrush violetBrush = new SolidBrush(Color.BlueViolet);
         SolidBrush slateblueBrush = new SolidBrush(Color.DarkSlateBlue);
         SolidBrush indigoBrush = new SolidBrush(Color.Indigo);
+        SolidBrush attackBrush = new SolidBrush(Color.DeepPink);
 
         int maxNovaSpeed = 10;
         int attackSpeed = 25;
@@ -92,9 +96,12 @@ namespace HyperHavocSHMUP
         Image[] playerFire = new Image[3];
         Image[] playerIdle = new Image[3];
 
+        int shootCooldown;
         public Form1()
         {
             InitializeComponent();
+
+            shootCooldown = Convert.ToInt32(100 / gameTimer.Interval);
 
             //define player model
             playerBase1 = Properties.Resources._0;
@@ -133,14 +140,33 @@ namespace HyperHavocSHMUP
             //eliminate null variable
             drawPlayer = playerBase1;
 
-            //titleMusic.Open(new Uri(Application.StartupPath + "/Resources/titlemusic.wav"));
-            //titleMusic.MediaEnded += new EventHandler(titleMusic_MediaEnded);
-            //titleMusic.Play();
+            titleMusic.Open(new Uri(Application.StartupPath + "/Resources/titlemusic.wav"));
+            titleMusic.MediaEnded += new EventHandler(titleMusic_MediaEnded);
+            titleMusic.Play();
 
+
+        }
+        
+        private void titleMusic_MediaEnded(object sender, EventArgs e)
+        {
+            titleMusic.Stop();
+            titleMusic.Play();
+        }
+
+        private void gameMusic_MediaEnded(object sender, EventArgs e)
+        {
+            gameMusic.Stop();
+            gameMusic.Play();
         }
 
         public void InitializeGame()
         {
+
+            gameMusic.Open(new Uri(Application.StartupPath + "/Resources/gameplaymusic.wav"));
+            gameMusic.MediaEnded += new EventHandler(gameMusic_MediaEnded);
+
+            titleMusic.Stop();
+            gameMusic.Play();
             BackColor = Color.Plum;
             maxNova = new Rectangle(100, 170, 40, 40);
 
@@ -280,6 +306,13 @@ namespace HyperHavocSHMUP
             {
                 drawPlayer = shoot1;
                 fireCounter++;
+
+                if (shootCooldown == 0)
+                {
+                    shootList.Add(new Rectangle(maxNova.X + maxNova.Width, maxNova.Y + (maxNova.Height / 2), 7, 5));
+                    shootCooldown = Convert.ToInt32(100 / gameTimer.Interval);
+                }
+
                 //recoil
                 if (maxNova.X > 15)
                 {
@@ -293,6 +326,23 @@ namespace HyperHavocSHMUP
 
             }
 
+            int bullOp = 0;
+            List<Rectangle> shootListTemp = new List<Rectangle>();
+            foreach (Rectangle bullet in shootList)
+            {
+                Rectangle bulletStorer = bullet;
+                bulletStorer.X+= attackSpeed;
+                shootListTemp.Add(bulletStorer);
+                bullOp++;
+            }
+            shootList = shootListTemp;
+
+            shootCooldown--;
+
+            if (shootCooldown < 0)
+            {
+                shootCooldown = 0;
+            }
             //redraw the screen
             Refresh();
         }
@@ -353,14 +403,13 @@ namespace HyperHavocSHMUP
                 //drawing screen filter (keep at bottom)
                 e.Graphics.DrawImage(filter, screenFilter);
 
+            foreach (Rectangle bullet in shootList)
+            {
+                e.Graphics.FillRectangle(attackBrush, bullet);
             }
 
-            //private void titleMusic_MediaEnded(object sender, EventArgs e)
-            //{
-            //    titleMusic.Stop();
-            //    titleMusic.Play();
-            //}
+            }
 
-        }
+    }
 
     }
