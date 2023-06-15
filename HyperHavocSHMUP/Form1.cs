@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Media;
 using System.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace HyperHavocSHMUP
 {
@@ -20,48 +21,54 @@ namespace HyperHavocSHMUP
 
         string state = "waiting";
 
-
-        int flightCounter = 0;
-        int fireCounter = 0;
-
         //player
-        Rectangle maxNova = new Rectangle(100, 170, 40, 40);
+        Rectangle maxNova = new Rectangle(100, 170, 55, 55);
 
-        List <Rectangle> shootList = new List <Rectangle>();
+        //enemy
+        Rectangle baseEnemy = new Rectangle(500, 50, 40, 32);
+
+        List<Rectangle> shootList = new List<Rectangle>();
 
         //foreground buildings
-        Rectangle background1 = new Rectangle(0, 200, 90, 200);
-        Rectangle background2 = new Rectangle(95, 100, 90, 300);
-        Rectangle background3 = new Rectangle(175, 300, 165, 400);
-        Rectangle background4 = new Rectangle(260, 250, 80, 200);
-        Rectangle background5 = new Rectangle(350, 220, 90, 200);
-        Rectangle background6 = new Rectangle(400, 300, 190, 300);
-        Rectangle background7 = new Rectangle(620, 150, 90, 250);
-        Rectangle background8 = new Rectangle(710, 100, 80, 400);
+        Rectangle background1 = new Rectangle(0, 200, 90, 600);
+        Rectangle background2 = new Rectangle(95, 100, 90, 600);
+        Rectangle background3 = new Rectangle(175, 300, 165, 700);
+        Rectangle background4 = new Rectangle(260, 250, 80, 500);
+        Rectangle background5 = new Rectangle(350, 220, 90, 500);
+        Rectangle background6 = new Rectangle(400, 300, 190, 600);
+        Rectangle background7 = new Rectangle(620, 150, 90, 500);
+        Rectangle background8 = new Rectangle(710, 100, 80, 700);
+        Rectangle background9 = new Rectangle(800, 300, 165, 700);
+        Rectangle background10 = new Rectangle(1000, 250, 100, 700);
+        Rectangle background11 = new Rectangle(1100, 200, 130, 700);
 
         //background buildings
-        Rectangle background1_2 = new Rectangle(20, 150, 90, 250);
-        Rectangle background2_2 = new Rectangle(155, 60, 90, 400);
-        Rectangle background3_2 = new Rectangle(200, 120, 90, 400);
-        Rectangle background4_2 = new Rectangle(320, 100, 180, 300);
-        Rectangle background5_2 = new Rectangle(595, 15, 100, 400);
+        Rectangle background1_2 = new Rectangle(20, 150, 90, 800);
+        Rectangle background2_2 = new Rectangle(155, 60, 90, 900);
+        Rectangle background3_2 = new Rectangle(200, 120, 90, 800);
+        Rectangle background4_2 = new Rectangle(320, 100, 180, 800);
+        Rectangle background5_2 = new Rectangle(595, 15, 100, 800);
+        Rectangle background6_2 = new Rectangle(650, 400, 700, 600);
+        Rectangle background7_2 = new Rectangle(960, 150, 90, 800);
 
         //far buildings
-        Rectangle background1_3 = new Rectangle(250, 200, 100, 300);
-        Rectangle background2_3 = new Rectangle(520, 80, 100, 400);
+        Rectangle background1_3 = new Rectangle(250, 200, 100, 700);
+        Rectangle background2_3 = new Rectangle(520, 80, 100, 800);
+        Rectangle background3_3 = new Rectangle(780, 200, 110, 800);
 
-
-        //Rectangle baseEnemy = new Rectangle(200, 150, 20, 20);
-        Rectangle screenFilter = new Rectangle(-3, 0, 803, 400);
+        Rectangle screenFilter = new Rectangle(-4, 0, 1204, 600);
 
         //brushes
         SolidBrush violetBrush = new SolidBrush(Color.BlueViolet);
         SolidBrush slateblueBrush = new SolidBrush(Color.DarkSlateBlue);
         SolidBrush indigoBrush = new SolidBrush(Color.Indigo);
-        SolidBrush attackBrush = new SolidBrush(Color.DeepPink);
+        //SolidBrush attackBrush = new SolidBrush(Color.DeepPink);
+
+        int flightCounter = 0;
+        int fireCounter = 0;
 
         int maxNovaSpeed = 10;
-        int attackSpeed = 25;
+        int attackSpeed = 30;
 
         //movement bools
         bool aDown = false;
@@ -86,15 +93,25 @@ namespace HyperHavocSHMUP
         Image flight3;
         Image flight4;
         //base enemy model
-        //Image enemy1;
+        Image enemy1;
+        //enemy attacks
+        Image enemy_1;
+        Image enemy_2;
+        Image enemy_3;
+        Image enemy_4;
 
         //filter sprite
         Image filter;
+
+        //projectile sprite
+        Image projectile;
 
         //animation arrays
         Image[] playerFlight = new Image[4];
         Image[] playerFire = new Image[3];
         Image[] playerIdle = new Image[3];
+        Image[] enemyAttack = new Image[4];
+
 
         int shootCooldown;
         public Form1()
@@ -132,7 +149,10 @@ namespace HyperHavocSHMUP
             playerFlight[3] = flight4;
 
             //define enemy model
-            //enemy1 = Properties.Resources.enemy0;
+            enemy1 = Properties.Resources.enemy_1;
+
+            //define projectile
+            projectile = Properties.Resources.projectile3;
 
             //define screen filter
             filter = Properties.Resources.crt1200x600;
@@ -168,7 +188,7 @@ namespace HyperHavocSHMUP
             titleMusic.Stop();
             gameMusic.Play();
             BackColor = Color.Plum;
-            maxNova = new Rectangle(100, 170, 40, 40);
+            maxNova = new Rectangle(100, 170, 55, 55);
 
 
             //baseEnemy = new Rectangle(200, 150, 20, 20);
@@ -184,18 +204,23 @@ namespace HyperHavocSHMUP
             //change game state and start engine
             state = "playing";
             gameTimer.Enabled = true;
+
         }
 
         public void InitializeIntro()
         {
+
+            introTimer.Enabled = true;
+
             titleLabel.Text = "";
             backLabel1.Text = "";
             backLabel2.Text = "";
             backLabel3.Text = "";
             backLabel4.Text = "";
-            subtitleLabel.Text = "Press [Space] to Continue";
+            subtitleLabel.Text = "";
 
             state = "intro";
+
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -223,7 +248,7 @@ namespace HyperHavocSHMUP
                     {
                         InitializeIntro();
                     }
-                    if (state == "intro" || state == "end")
+                    if (state == "intro")
                     {
                         InitializeGame();
                     }
@@ -301,7 +326,8 @@ namespace HyperHavocSHMUP
                 {
                     flightCounter = 0;
                 }
-            }
+                    
+             }
             if (enterDown == true)
             {
                 drawPlayer = shoot1;
@@ -309,7 +335,7 @@ namespace HyperHavocSHMUP
 
                 if (shootCooldown == 0)
                 {
-                    shootList.Add(new Rectangle(maxNova.X + maxNova.Width, maxNova.Y + (maxNova.Height / 2), 7, 5));
+                    shootList.Add(new Rectangle(maxNova.X + maxNova.Width, maxNova.Y + (maxNova.Height / 2), 13, 10));
                     shootCooldown = Convert.ToInt32(100 / gameTimer.Interval);
                 }
 
@@ -366,49 +392,59 @@ namespace HyperHavocSHMUP
             }
 
             if (state == "playing")
+            {
+
+                //far buildings
+                e.Graphics.FillRectangle(indigoBrush, background1_3);
+                e.Graphics.FillRectangle(indigoBrush, background2_3);
+                e.Graphics.FillRectangle(indigoBrush, background3_3);
+
+                //background buildings
+                e.Graphics.FillRectangle(slateblueBrush, background1_2);
+                e.Graphics.FillRectangle(slateblueBrush, background2_2);
+                e.Graphics.FillRectangle(slateblueBrush, background3_2);
+                e.Graphics.FillRectangle(slateblueBrush, background4_2);
+                e.Graphics.FillRectangle(slateblueBrush, background5_2);
+                e.Graphics.FillRectangle(slateblueBrush, background6_2);
+                e.Graphics.FillRectangle(slateblueBrush, background7_2);
+
+                //foreground buildings
+                e.Graphics.FillRectangle(violetBrush, background1);
+                e.Graphics.FillRectangle(violetBrush, background2);
+                e.Graphics.FillRectangle(violetBrush, background3);
+                e.Graphics.FillRectangle(violetBrush, background4);
+                e.Graphics.FillRectangle(violetBrush, background5);
+                e.Graphics.FillRectangle(violetBrush, background6);
+                e.Graphics.FillRectangle(violetBrush, background7);
+                e.Graphics.FillRectangle(violetBrush, background8);
+                e.Graphics.FillRectangle(violetBrush, background9);
+                e.Graphics.FillRectangle(violetBrush, background10);
+                e.Graphics.FillRectangle(violetBrush, background11);
+
+                e.Graphics.DrawImage(enemy1, baseEnemy);
+
+                e.Graphics.DrawImage(drawPlayer, maxNova);
+
+                drawPlayer = playerFlight[flightCounter];
+
+                if (enterDown == true)
                 {
-                    //e.Graphics.DrawImage(enemy1, baseEnemy);
-
-                    //far buildings
-                    e.Graphics.FillRectangle(indigoBrush, background1_3);
-                    e.Graphics.FillRectangle(indigoBrush, background2_3);
-
-                    //background buildings
-                    e.Graphics.FillRectangle(slateblueBrush, background1_2);
-                    e.Graphics.FillRectangle(slateblueBrush, background2_2);
-                    e.Graphics.FillRectangle(slateblueBrush, background3_2);
-                    e.Graphics.FillRectangle(slateblueBrush, background4_2);
-                    e.Graphics.FillRectangle(slateblueBrush, background5_2);
-
-                    //foreground buildings
-                    e.Graphics.FillRectangle(violetBrush, background1);
-                    e.Graphics.FillRectangle(violetBrush, background2);
-                    e.Graphics.FillRectangle(violetBrush, background3);
-                    e.Graphics.FillRectangle(violetBrush, background4);
-                    e.Graphics.FillRectangle(violetBrush, background5);
-                    e.Graphics.FillRectangle(violetBrush, background6);
-                    e.Graphics.FillRectangle(violetBrush, background7);
-                    e.Graphics.FillRectangle(violetBrush, background8);
-
-                    e.Graphics.DrawImage(drawPlayer, maxNova);
-                    drawPlayer = playerFlight[flightCounter];
-
-                    if (enterDown == true)
-                    {
-                        drawPlayer = playerFire[fireCounter];
-                    }
-
+                    drawPlayer = playerFire[fireCounter];
                 }
 
-                //drawing screen filter (keep at bottom)
-                e.Graphics.DrawImage(filter, screenFilter);
+            }
+
+
 
             foreach (Rectangle bullet in shootList)
             {
-                e.Graphics.FillRectangle(attackBrush, bullet);
+                e.Graphics.DrawImage(projectile, bullet);
+                //e.Graphics.FillRectangle(attackBrush, bullet);
             }
 
-            }
+            //drawing screen filter (keep at bottom)
+            e.Graphics.DrawImage(filter, screenFilter);
+        }
 
     }
 

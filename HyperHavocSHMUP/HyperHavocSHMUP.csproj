@@ -150,5 +150,41 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enemy_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enemy_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enemy_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enemy_4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enemy_5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enemy_6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enemy_7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enemy_8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enemy_9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\projectile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\projectile2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\projectile3.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

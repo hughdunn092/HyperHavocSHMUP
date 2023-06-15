@@ -142,8 +142,44 @@
   <data name="enemy5" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\enemy5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="enemy_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\enemy_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="enemy_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\enemy_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="enemy_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\enemy_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="enemy_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\enemy_4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="enemy_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\enemy_5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="enemy_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\enemy_6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="enemy_7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\enemy_7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="enemy_8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\enemy_8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="enemy_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\enemy_9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="gameplaymusic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gameplaymusic.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="projectile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\projectile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="projectile2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\projectile2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="projectile3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\projectile3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="titlemusic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\titlemusic.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
