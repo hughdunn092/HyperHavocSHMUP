@@ -19,6 +19,15 @@ namespace HyperHavocSHMUP
         System.Windows.Media.MediaPlayer titleMusic = new System.Windows.Media.MediaPlayer();
         System.Windows.Media.MediaPlayer gameMusic = new System.Windows.Media.MediaPlayer();
 
+        public class Enemy
+        {
+            public Rectangle Body = new Rectangle();
+            public int Damage = 1;
+            public int Health = 1;
+            public int Sprites = 1;
+            public Image Sprite = Properties.Resources.enemy_8;
+        }
+
         string state = "waiting";
 
         //player
@@ -28,14 +37,15 @@ namespace HyperHavocSHMUP
         Rectangle baseEnemy = new Rectangle(500, 50, 40, 32);
 
         List<Rectangle> shootList = new List<Rectangle>();
+        List<Enemy> enemyList = new List<Enemy>();
 
         //foreground buildings
         Rectangle background1 = new Rectangle(0, 200, 90, 600);
         Rectangle background2 = new Rectangle(95, 100, 90, 600);
-        Rectangle background3 = new Rectangle(175, 300, 165, 700);
+        Rectangle background3 = new Rectangle(175, 400, 165, 700);
         Rectangle background4 = new Rectangle(260, 250, 80, 500);
         Rectangle background5 = new Rectangle(350, 220, 90, 500);
-        Rectangle background6 = new Rectangle(400, 300, 190, 600);
+        Rectangle background6 = new Rectangle(400, 350, 190, 600);
         Rectangle background7 = new Rectangle(620, 150, 90, 500);
         Rectangle background8 = new Rectangle(710, 100, 80, 700);
         Rectangle background9 = new Rectangle(800, 300, 165, 700);
@@ -62,10 +72,15 @@ namespace HyperHavocSHMUP
         SolidBrush violetBrush = new SolidBrush(Color.BlueViolet);
         SolidBrush slateblueBrush = new SolidBrush(Color.DarkSlateBlue);
         SolidBrush indigoBrush = new SolidBrush(Color.Indigo);
+        SolidBrush magentaBrush = new SolidBrush(Color.Magenta);
+        SolidBrush bulletBrush = new SolidBrush(Color.Transparent);
+        Font introFont = new Font("OCR A Extended", 16, FontStyle.Bold);
         //SolidBrush attackBrush = new SolidBrush(Color.DeepPink);
 
         int flightCounter = 0;
         int fireCounter = 0;
+        int enemyDeathCounter = 0;
+
 
         int maxNovaSpeed = 10;
         int attackSpeed = 30;
@@ -76,9 +91,13 @@ namespace HyperHavocSHMUP
         bool wDown = false;
         bool sDown = false;
         bool enterDown = false;
+        bool shiftDown = false;
+        bool enemylife = true;
 
         //general image
         Image drawPlayer;
+        //general enemy
+        Image drawEnemy;
         //base player model
         Image playerBase1;
         Image playerBase2;
@@ -93,12 +112,17 @@ namespace HyperHavocSHMUP
         Image flight3;
         Image flight4;
         //base enemy model
-        Image enemy1;
-        //enemy attacks
         Image enemy_1;
+        //enemy attacks
         Image enemy_2;
         Image enemy_3;
         Image enemy_4;
+        //enemy death
+        Image enemy1;
+        Image enemy2;
+        Image enemy3;
+        Image enemy4;
+        Image enemy5;
 
         //filter sprite
         Image filter;
@@ -110,13 +134,18 @@ namespace HyperHavocSHMUP
         Image[] playerFlight = new Image[4];
         Image[] playerFire = new Image[3];
         Image[] playerIdle = new Image[3];
-        Image[] enemyAttack = new Image[4];
+        Image[] enemyAttack = new Image[3];
+        Image[] enemyDeath = new Image[5];
 
-
+        //text array
+        String[] introText = new String[]{"Welcome to the neon-lit streets of NeoHavoc City,", "a place where chaos and pulsating energy reign supreme.", "In the not-so-distant future,", "the world has transformed into a vibrant paradise where synthwave beats pump through every fibre of society."};
+        
         int shootCooldown;
         public Form1()
         {
             InitializeComponent();
+
+            Enemy newEnemy = new Enemy();
 
             shootCooldown = Convert.ToInt32(100 / gameTimer.Interval);
 
@@ -149,7 +178,7 @@ namespace HyperHavocSHMUP
             playerFlight[3] = flight4;
 
             //define enemy model
-            enemy1 = Properties.Resources.enemy_1;
+            enemy_1 = Properties.Resources.enemy_1;
 
             //define projectile
             projectile = Properties.Resources.projectile3;
@@ -210,16 +239,23 @@ namespace HyperHavocSHMUP
         public void InitializeIntro()
         {
 
+            /*foreach (string intro in introText)
+            {
+                introLabel.Text += $"{intro}\n";
+            }*/
+
             introTimer.Enabled = true;
 
-            titleLabel.Text = "";
-            backLabel1.Text = "";
-            backLabel2.Text = "";
-            backLabel3.Text = "";
-            backLabel4.Text = "";
-            subtitleLabel.Text = "";
+            titleLabel.Visible = false;
+            backLabel1.Visible = false;
+            backLabel2.Visible =false;
+            backLabel3.Visible = false;
+            backLabel4.Visible = false;
+            subtitleLabel.Visible = false;
 
             state = "intro";
+
+            Refresh();
 
         }
 
@@ -242,13 +278,15 @@ namespace HyperHavocSHMUP
                 case Keys.Enter:
                     enterDown = true;
                     break;
+                //case Keys.RShiftKey:
+                //    shiftDown = true;
 
                 case Keys.Space:
                     if(state == "waiting" || state == "end")
                     {
                         InitializeIntro();
                     }
-                    if (state == "intro")
+                    else if (state == "intro")
                     {
                         InitializeGame();
                     }
@@ -286,7 +324,7 @@ namespace HyperHavocSHMUP
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            if (dDown == true && maxNova.X < this.Width - maxNova.Width - 400)
+            if (dDown == true && maxNova.X < this.Width - maxNova.Width - 550)
             {
                 maxNova.X += maxNovaSpeed;
                 flightCounter++;
@@ -296,7 +334,7 @@ namespace HyperHavocSHMUP
                     flightCounter = 0;
                 }
             }
-            if (aDown == true && maxNova.X > 15)
+            if (aDown == true && maxNova.X > 25)
             {
                 maxNova.X -= maxNovaSpeed;
                 flightCounter++;
@@ -306,7 +344,7 @@ namespace HyperHavocSHMUP
                     flightCounter = 0;
                 }
             }
-            if (wDown == true && maxNova.Y > 10)
+            if (wDown == true && maxNova.Y > 20)
             {
                 maxNova.Y -= maxNovaSpeed;
                 flightCounter++;
@@ -316,7 +354,7 @@ namespace HyperHavocSHMUP
                     flightCounter = 0;
                 }
             }
-            if (sDown == true && maxNova.Y < this.Height - maxNova.Height - 10)
+            if (sDown == true && maxNova.Y < this.Height - maxNova.Height - 20)
             {
                 maxNova.Y += maxNovaSpeed;
                 drawPlayer = flight2;
@@ -326,8 +364,8 @@ namespace HyperHavocSHMUP
                 {
                     flightCounter = 0;
                 }
-                    
-             }
+
+            }
             if (enterDown == true)
             {
                 drawPlayer = shoot1;
@@ -350,25 +388,53 @@ namespace HyperHavocSHMUP
                     fireCounter = 0;
                 }
 
+                List<Rectangle> shootListTemp = new List<Rectangle>();
+                List<Enemy> enemyListTemp = new List<Enemy>();
+
+                foreach (Rectangle shoot in shootList)
+                {
+                    foreach (Enemy enemy in enemyList)
+                    {
+                        if (shoot.IntersectsWith(enemy.Body))
+                        {
+                            enemyDeathCounter++;
+                            drawEnemy = enemy_1;
+
+                            if (enemyDeathCounter == 5)
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            enemyListTemp.Add(enemy);
+                        }
+                    }
+                }
+
+                shootList = shootListTemp;
+
+                int bullOp = 0;
+                shootListTemp = new List<Rectangle>();
+                foreach (Rectangle bullet in shootList)
+                {
+                    Rectangle bulletStorer = bullet;
+                    bulletStorer.X += attackSpeed;
+                    shootListTemp.Add(bulletStorer);
+                    bullOp++;
+                }
+
+                shootList = shootListTemp;
+
+                shootCooldown--;
+
+                if (shootCooldown < 0)
+                {
+                    shootCooldown = 0;
+                }
+
             }
 
-            int bullOp = 0;
-            List<Rectangle> shootListTemp = new List<Rectangle>();
-            foreach (Rectangle bullet in shootList)
-            {
-                Rectangle bulletStorer = bullet;
-                bulletStorer.X+= attackSpeed;
-                shootListTemp.Add(bulletStorer);
-                bullOp++;
-            }
-            shootList = shootListTemp;
-
-            shootCooldown--;
-
-            if (shootCooldown < 0)
-            {
-                shootCooldown = 0;
-            }
             //redraw the screen
             Refresh();
         }
@@ -388,7 +454,12 @@ namespace HyperHavocSHMUP
 
             if (state == "intro")
             {
-
+                int height = 50;
+                foreach (string intro in introText)
+                {
+                    e.Graphics.DrawString(intro, introFont, magentaBrush, Convert.ToInt16((this.Width - (intro.Count<char>() * 16)) / 5), height);
+                    height += introFont.Height + 5;
+                }
             }
 
             if (state == "playing")
@@ -421,25 +492,30 @@ namespace HyperHavocSHMUP
                 e.Graphics.FillRectangle(violetBrush, background10);
                 e.Graphics.FillRectangle(violetBrush, background11);
 
-                e.Graphics.DrawImage(enemy1, baseEnemy);
 
-                e.Graphics.DrawImage(drawPlayer, maxNova);
-
-                drawPlayer = playerFlight[flightCounter];
+                if (enemylife == true)
+                {
+                    e.Graphics.DrawImage(enemy_1, baseEnemy);
+                    drawEnemy = enemyDeath[enemyDeathCounter];
+                }
 
                 if (enterDown == true)
                 {
                     drawPlayer = playerFire[fireCounter];
                 }
+                else
+                {
+                    drawPlayer = playerFlight[flightCounter];
+                }
+
+                e.Graphics.DrawImage(drawPlayer, maxNova);
 
             }
-
-
 
             foreach (Rectangle bullet in shootList)
             {
                 e.Graphics.DrawImage(projectile, bullet);
-                //e.Graphics.FillRectangle(attackBrush, bullet);
+                e.Graphics.FillRectangle(bulletBrush, bullet);
             }
 
             //drawing screen filter (keep at bottom)
@@ -448,4 +524,4 @@ namespace HyperHavocSHMUP
 
     }
 
-    }
+}

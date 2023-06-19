@@ -45,9 +45,10 @@
             this.titleLabel.BackColor = System.Drawing.Color.Transparent;
             this.titleLabel.Font = new System.Drawing.Font("OCR A Extended", 48F, System.Drawing.FontStyle.Bold);
             this.titleLabel.ForeColor = System.Drawing.Color.Magenta;
-            this.titleLabel.Location = new System.Drawing.Point(-1, 180);
+            this.titleLabel.Location = new System.Drawing.Point(-1, 120);
+            this.titleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(1175, 99);
+            this.titleLabel.Size = new System.Drawing.Size(783, 66);
             this.titleLabel.TabIndex = 0;
             this.titleLabel.Text = "HYPER HAVOC";
             this.titleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -62,9 +63,10 @@
             this.subtitleLabel.BackColor = System.Drawing.Color.Transparent;
             this.subtitleLabel.Font = new System.Drawing.Font("OCR A Extended", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.subtitleLabel.ForeColor = System.Drawing.Color.Magenta;
-            this.subtitleLabel.Location = new System.Drawing.Point(4, 461);
+            this.subtitleLabel.Location = new System.Drawing.Point(3, 307);
+            this.subtitleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.subtitleLabel.Name = "subtitleLabel";
-            this.subtitleLabel.Size = new System.Drawing.Size(1173, 59);
+            this.subtitleLabel.Size = new System.Drawing.Size(782, 39);
             this.subtitleLabel.TabIndex = 1;
             this.subtitleLabel.Text = "Press [Space] to Play  Press [Esc] to Exit";
             this.subtitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -75,9 +77,10 @@
             this.backLabel1.BackColor = System.Drawing.Color.Transparent;
             this.backLabel1.Font = new System.Drawing.Font("OCR A Extended", 40F, System.Drawing.FontStyle.Bold);
             this.backLabel1.ForeColor = System.Drawing.Color.DarkSlateBlue;
-            this.backLabel1.Location = new System.Drawing.Point(292, 100);
+            this.backLabel1.Location = new System.Drawing.Point(195, 67);
+            this.backLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.backLabel1.Name = "backLabel1";
-            this.backLabel1.Size = new System.Drawing.Size(574, 83);
+            this.backLabel1.Size = new System.Drawing.Size(399, 57);
             this.backLabel1.TabIndex = 2;
             this.backLabel1.Text = "HYPER HAVOC";
             this.backLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -87,9 +90,10 @@
             this.backLabel2.BackColor = System.Drawing.Color.Transparent;
             this.backLabel2.Font = new System.Drawing.Font("OCR A Extended", 40F, System.Drawing.FontStyle.Bold);
             this.backLabel2.ForeColor = System.Drawing.Color.DarkSlateBlue;
-            this.backLabel2.Location = new System.Drawing.Point(1, 269);
+            this.backLabel2.Location = new System.Drawing.Point(1, 179);
+            this.backLabel2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.backLabel2.Name = "backLabel2";
-            this.backLabel2.Size = new System.Drawing.Size(1165, 77);
+            this.backLabel2.Size = new System.Drawing.Size(777, 51);
             this.backLabel2.TabIndex = 3;
             this.backLabel2.Text = "HYPER HAVOC";
             this.backLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -99,9 +103,10 @@
             this.backLabel3.BackColor = System.Drawing.Color.Transparent;
             this.backLabel3.Font = new System.Drawing.Font("OCR A Extended", 32F, System.Drawing.FontStyle.Bold);
             this.backLabel3.ForeColor = System.Drawing.Color.Indigo;
-            this.backLabel3.Location = new System.Drawing.Point(1, 346);
+            this.backLabel3.Location = new System.Drawing.Point(1, 231);
+            this.backLabel3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.backLabel3.Name = "backLabel3";
-            this.backLabel3.Size = new System.Drawing.Size(1163, 77);
+            this.backLabel3.Size = new System.Drawing.Size(775, 51);
             this.backLabel3.TabIndex = 4;
             this.backLabel3.Text = "HYPER HAVOC";
             this.backLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -112,9 +117,10 @@
             this.backLabel4.BackColor = System.Drawing.Color.Transparent;
             this.backLabel4.Font = new System.Drawing.Font("OCR A Extended", 32F, System.Drawing.FontStyle.Bold);
             this.backLabel4.ForeColor = System.Drawing.Color.Indigo;
-            this.backLabel4.Location = new System.Drawing.Point(347, 34);
+            this.backLabel4.Location = new System.Drawing.Point(231, 23);
+            this.backLabel4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.backLabel4.Name = "backLabel4";
-            this.backLabel4.Size = new System.Drawing.Size(468, 66);
+            this.backLabel4.Size = new System.Drawing.Size(317, 45);
             this.backLabel4.TabIndex = 5;
             this.backLabel4.Text = "HYPER HAVOC";
             this.backLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -125,10 +131,10 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1200, 600);
+            this.ClientSize = new System.Drawing.Size(800, 400);
             this.Controls.Add(this.backLabel4);
             this.Controls.Add(this.backLabel3);
             this.Controls.Add(this.backLabel2);
@@ -138,6 +144,7 @@
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";
             this.Text = "HYPER HAVOC";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
