@@ -139,7 +139,7 @@ namespace HyperHavocSHMUP
         Image[] playerFire = new Image[3];
         Image[] playerIdle = new Image[3];
         Image[] enemyAttack = new Image[3];
-        Image[] enemyDeath = new Image[4];
+        Image[] enemyDeath = new Image[5];
         #endregion
 
         //text array
@@ -151,9 +151,9 @@ namespace HyperHavocSHMUP
             InitializeComponent();
             
             Enemy newEnemy = new Enemy();
-            for (int i = 0; i <=2; i++)
+            for (int i = 0; i <= 2; i++)
             {
-                newEnemy.Body = new Rectangle(200, 50 + (50 * i), 20, 20);
+                newEnemy.Body = new Rectangle(200, 50 + (50 * i), 40, 40);
                 newEnemy.Sprites = 0;
                 newEnemy.Sprite = Properties.Resources.enemy_1;
                 if (i == 0)
@@ -225,8 +225,8 @@ namespace HyperHavocSHMUP
             enemyDeath[4] = enemy5;
             //define enemy shoot animations
             enemyAttack[0] = enemy_2;
-            enemyDeath[1] = enemy_3;
-            enemyDeath[2] = enemy_4;
+            enemyAttack[1] = enemy_3;
+            enemyAttack[2] = enemy_4;
 
             //define projectile
             projectile = Properties.Resources.projectile3;
@@ -436,7 +436,7 @@ namespace HyperHavocSHMUP
                 }
             }
 
-            List<Rectangle> shootListTemp = new List<Rectangle>();
+            //List<Rectangle> shootListTemp = new List<Rectangle>();
             List<Enemy> enemyListTemp = new List<Enemy>();
 
             foreach (Rectangle shoot in shootList)
@@ -460,21 +460,25 @@ namespace HyperHavocSHMUP
                             enemyListTemp.Add(enemy);
                         }
                     }
-                    shootList = shootListTemp;
                 }
             }
 
             int bullOp = 0;
-            shootListTemp = new List<Rectangle>();
-            foreach (Rectangle bullet in shootList)
+            //shootListTemp = new List<Rectangle>();
+            //foreach (Rectangle bullet in shootList)
+            //{
+            //    Rectangle bulletStorer = bullet;
+            //    bulletStorer.X += attackSpeed;
+            //    shootListTemp.Add(bulletStorer);
+            //    bullOp++;
+            //}
+
+            for (int i = 0; i < shootList.Count; i++)
             {
-                Rectangle bulletStorer = bullet;
-                bulletStorer.X += attackSpeed;
-                shootListTemp.Add(bulletStorer);
-                bullOp++;
+                int x = shootList[i].X + attackSpeed;
+                shootList[i] = new Rectangle(x, shootList[i].Y, shootList[i].Width, shootList[i].Height);
             }
 
-            shootList = shootListTemp;
 
             shootCooldown--;
 
@@ -483,7 +487,6 @@ namespace HyperHavocSHMUP
                 shootCooldown = 0;
             }
 
-            enemyListTemp = new List<Enemy>();
             foreach (Enemy enemy in enemyList)
             {
                 enemy.Sprites++;
@@ -495,7 +498,7 @@ namespace HyperHavocSHMUP
                     case "Shoot":
                         if (enemy.Sprites > 3)
                         {
-                            enemy.Sprites =0;
+                            enemy.Sprites = 0;
                         }
                         break;
                     case "Death":
@@ -505,9 +508,9 @@ namespace HyperHavocSHMUP
                         }
                         break;
                 }
+
                 enemyListTemp.Add(enemy);
             }
-            enemyList = enemyListTemp;
 
             if (enemyList.Count > 0)
             {
