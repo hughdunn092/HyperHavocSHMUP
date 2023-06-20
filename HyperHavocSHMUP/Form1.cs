@@ -19,13 +19,13 @@ namespace HyperHavocSHMUP
         System.Windows.Media.MediaPlayer titleMusic = new System.Windows.Media.MediaPlayer();
         System.Windows.Media.MediaPlayer gameMusic = new System.Windows.Media.MediaPlayer();
 
+
         public class Enemy
         {
             public Rectangle Body = new Rectangle();
-            public int Damage = 1;
-            public int Health = 1;
-            public int Sprites = 1;
-            public Image Sprite = Properties.Resources.enemy_8;
+            public int Damage, Health, Sprites;
+            public String State;
+            public Image Sprite = Properties.Resources.enemy_1;
         }
 
         string state = "waiting";
@@ -38,6 +38,8 @@ namespace HyperHavocSHMUP
 
         List<Rectangle> shootList = new List<Rectangle>();
         List<Enemy> enemyList = new List<Enemy>();
+
+        #region Rectangles
 
         //foreground buildings
         Rectangle background1 = new Rectangle(0, 200, 90, 600);
@@ -67,6 +69,7 @@ namespace HyperHavocSHMUP
         Rectangle background3_3 = new Rectangle(780, 200, 110, 800);
 
         Rectangle screenFilter = new Rectangle(-4, 0, 1204, 600);
+        #endregion
 
         //brushes
         SolidBrush violetBrush = new SolidBrush(Color.BlueViolet);
@@ -91,9 +94,8 @@ namespace HyperHavocSHMUP
         bool wDown = false;
         bool sDown = false;
         bool enterDown = false;
-        bool shiftDown = false;
-        bool enemylife = true;
 
+        #region Images
         //general image
         Image drawPlayer;
         //general enemy
@@ -129,26 +131,50 @@ namespace HyperHavocSHMUP
 
         //projectile sprite
         Image projectile;
+        #endregion
 
+        #region Sprite Animations
         //animation arrays
         Image[] playerFlight = new Image[4];
         Image[] playerFire = new Image[3];
         Image[] playerIdle = new Image[3];
         Image[] enemyAttack = new Image[3];
-        Image[] enemyDeath = new Image[5];
+        Image[] enemyDeath = new Image[4];
+        #endregion
 
         //text array
-        String[] introText = new String[]{"Welcome to the neon-lit streets of NeoHavoc City,", "a place where chaos and pulsating energy reign supreme.", "In the not-so-distant future,", "the world has transformed into a vibrant paradise where synthwave beats pump through every fibre of society."};
-        
+        String[] introText = new String[] { "Welcome to the neon-lit streets of NeoHavoc City,", "a place where chaos and pulsating energy reign supreme.", "In the not-so-distant future,", "the world has transformed into a vibrant paradise", "where synthwave beats pump through every fibre of society." };
+
         int shootCooldown;
         public Form1()
         {
             InitializeComponent();
-
+            
             Enemy newEnemy = new Enemy();
+            for (int i = 0; i <=2; i++)
+            {
+                newEnemy.Body = new Rectangle(200, 50 + (50 * i), 20, 20);
+                newEnemy.Sprites = 0;
+                newEnemy.Sprite = Properties.Resources.enemy_1;
+                if (i == 0)
+                {
+                    newEnemy.State = "Attack";
+                }
+                else if (i == 1)
+                {
+                    newEnemy.State = "Move";
+                }
+                else
+                {
+                    newEnemy.State = "Death";
+                }
+                enemyList.Add(newEnemy);
+                enemyList[i].Sprite = Properties.Resources.enemy_1;
+            }
 
             shootCooldown = Convert.ToInt32(100 / gameTimer.Interval);
 
+            #region Sprites
             //define player model
             playerBase1 = Properties.Resources._0;
             playerBase2 = Properties.Resources._2;
@@ -162,6 +188,17 @@ namespace HyperHavocSHMUP
             flight2 = Properties.Resources._8;
             flight3 = Properties.Resources._7;
             flight4 = Properties.Resources._9;
+            //define enemy death sprites
+            enemy1 = Properties.Resources.enemy1;
+            enemy2 = Properties.Resources.enemy2;
+            enemy3 = Properties.Resources.enemy3;
+            enemy4 = Properties.Resources.enemy4;
+            enemy5 = Properties.Resources.enemy5;
+            //define enemy shoot sprites
+            enemy_2 = Properties.Resources.enemy_2;
+            enemy_3 = Properties.Resources.enemy_3;
+            enemy_4 = Properties.Resources.enemy_4;
+
 
             //base animations
             playerIdle[0] = playerBase1;
@@ -180,6 +217,17 @@ namespace HyperHavocSHMUP
             //define enemy model
             enemy_1 = Properties.Resources.enemy_1;
 
+            //define enemy death animation
+            enemyDeath[0] = enemy1;
+            enemyDeath[1] = enemy2;
+            enemyDeath[2] = enemy3;
+            enemyDeath[3] = enemy4;
+            enemyDeath[4] = enemy5;
+            //define enemy shoot animations
+            enemyAttack[0] = enemy_2;
+            enemyDeath[1] = enemy_3;
+            enemyDeath[2] = enemy_4;
+
             //define projectile
             projectile = Properties.Resources.projectile3;
 
@@ -188,14 +236,14 @@ namespace HyperHavocSHMUP
 
             //eliminate null variable
             drawPlayer = playerBase1;
+            #endregion
 
             titleMusic.Open(new Uri(Application.StartupPath + "/Resources/titlemusic.wav"));
             titleMusic.MediaEnded += new EventHandler(titleMusic_MediaEnded);
             titleMusic.Play();
 
-
         }
-        
+
         private void titleMusic_MediaEnded(object sender, EventArgs e)
         {
             titleMusic.Stop();
@@ -220,7 +268,7 @@ namespace HyperHavocSHMUP
             maxNova = new Rectangle(100, 170, 55, 55);
 
 
-            //baseEnemy = new Rectangle(200, 150, 20, 20);
+            baseEnemy = new Rectangle(200, 150, 20, 20);
 
             //remove title screen
             titleLabel.Text = "";
@@ -248,7 +296,7 @@ namespace HyperHavocSHMUP
 
             titleLabel.Visible = false;
             backLabel1.Visible = false;
-            backLabel2.Visible =false;
+            backLabel2.Visible = false;
             backLabel3.Visible = false;
             backLabel4.Visible = false;
             subtitleLabel.Visible = false;
@@ -278,11 +326,9 @@ namespace HyperHavocSHMUP
                 case Keys.Enter:
                     enterDown = true;
                     break;
-                //case Keys.RShiftKey:
-                //    shiftDown = true;
 
                 case Keys.Space:
-                    if(state == "waiting" || state == "end")
+                    if (state == "waiting" || state == "end")
                     {
                         InitializeIntro();
                     }
@@ -319,6 +365,7 @@ namespace HyperHavocSHMUP
                 case Keys.Enter:
                     enterDown = false;
                     break;
+
             }
         }
 
@@ -387,11 +434,14 @@ namespace HyperHavocSHMUP
                 {
                     fireCounter = 0;
                 }
+            }
 
-                List<Rectangle> shootListTemp = new List<Rectangle>();
-                List<Enemy> enemyListTemp = new List<Enemy>();
+            List<Rectangle> shootListTemp = new List<Rectangle>();
+            List<Enemy> enemyListTemp = new List<Enemy>();
 
-                foreach (Rectangle shoot in shootList)
+            foreach (Rectangle shoot in shootList)
+            {
+                if (enemyList.Count > 0)
                 {
                     foreach (Enemy enemy in enemyList)
                     {
@@ -410,29 +460,72 @@ namespace HyperHavocSHMUP
                             enemyListTemp.Add(enemy);
                         }
                     }
+                    shootList = shootListTemp;
                 }
+            }
 
-                shootList = shootListTemp;
+            int bullOp = 0;
+            shootListTemp = new List<Rectangle>();
+            foreach (Rectangle bullet in shootList)
+            {
+                Rectangle bulletStorer = bullet;
+                bulletStorer.X += attackSpeed;
+                shootListTemp.Add(bulletStorer);
+                bullOp++;
+            }
 
-                int bullOp = 0;
-                shootListTemp = new List<Rectangle>();
-                foreach (Rectangle bullet in shootList)
+            shootList = shootListTemp;
+
+            shootCooldown--;
+
+            if (shootCooldown < 0)
+            {
+                shootCooldown = 0;
+            }
+
+            enemyListTemp = new List<Enemy>();
+            foreach (Enemy enemy in enemyList)
+            {
+                enemy.Sprites++;
+                switch (enemy.State)
                 {
-                    Rectangle bulletStorer = bullet;
-                    bulletStorer.X += attackSpeed;
-                    shootListTemp.Add(bulletStorer);
-                    bullOp++;
+                    case "Move":
+                        enemy.Sprites = 0;
+                        break;
+                    case "Shoot":
+                        if (enemy.Sprites > 3)
+                        {
+                            enemy.Sprites =0;
+                        }
+                        break;
+                    case "Death":
+                        if (enemy.Sprites > 4)
+                        {
+                            enemy.Sprites = 0;
+                        }
+                        break;
                 }
+                enemyListTemp.Add(enemy);
+            }
+            enemyList = enemyListTemp;
 
-                shootList = shootListTemp;
-
-                shootCooldown--;
-
-                if (shootCooldown < 0)
+            if (enemyList.Count > 0)
+            {
+                foreach (Enemy enemy in enemyList)
                 {
-                    shootCooldown = 0;
+                    switch (enemy.State)
+                    {
+                        case "Move":
+                            enemy.Sprite = Properties.Resources.enemy_1;
+                            break;
+                        case "Shoot":
+                            enemy.Sprite = enemyAttack[enemy.Sprites];
+                            break;
+                        case "Death":
+                            enemy.Sprite = enemyDeath[enemy.Sprites];
+                            break;
+                    }
                 }
-
             }
 
             //redraw the screen
@@ -457,14 +550,14 @@ namespace HyperHavocSHMUP
                 int height = 50;
                 foreach (string intro in introText)
                 {
-                    e.Graphics.DrawString(intro, introFont, magentaBrush, Convert.ToInt16((this.Width - (intro.Count<char>() * 16)) / 5), height);
+                    e.Graphics.DrawString(intro, introFont, magentaBrush, Convert.ToInt16((this.Width - (intro.Count<char>() * 16)) / 6), height);
                     height += introFont.Height + 5;
                 }
             }
 
             if (state == "playing")
             {
-
+                #region Drawing Rectangles
                 //far buildings
                 e.Graphics.FillRectangle(indigoBrush, background1_3);
                 e.Graphics.FillRectangle(indigoBrush, background2_3);
@@ -491,12 +584,15 @@ namespace HyperHavocSHMUP
                 e.Graphics.FillRectangle(violetBrush, background9);
                 e.Graphics.FillRectangle(violetBrush, background10);
                 e.Graphics.FillRectangle(violetBrush, background11);
+                #endregion
 
 
-                if (enemylife == true)
+               if(enemyList.Count> 0)
                 {
-                    e.Graphics.DrawImage(enemy_1, baseEnemy);
-                    drawEnemy = enemyDeath[enemyDeathCounter];
+                    foreach(Enemy enemy in enemyList)
+                    {
+                        e.Graphics.DrawImage(enemy.Sprite, enemy.Body);
+                    }
                 }
 
                 if (enterDown == true)
@@ -511,6 +607,7 @@ namespace HyperHavocSHMUP
                 e.Graphics.DrawImage(drawPlayer, maxNova);
 
             }
+
 
             foreach (Rectangle bullet in shootList)
             {

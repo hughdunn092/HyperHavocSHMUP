@@ -186,5 +186,10 @@
   <ItemGroup>
     <None Include="Resources\projectile3.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cleveland.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
