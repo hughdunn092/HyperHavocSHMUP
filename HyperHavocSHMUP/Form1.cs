@@ -326,10 +326,12 @@ namespace HyperHavocSHMUP
                     else if (state == "intro1")
                     {
                         state = "intro2";
+                        Refresh();
                     }
                     else if (state == "intro2")
                     {
                         state = "intro3";
+                        Refresh();
                     }
                     else if (state == "intro3")
                     {
@@ -436,6 +438,10 @@ namespace HyperHavocSHMUP
             }
 
             List<Enemy> enemyListTemp = new List<Enemy>();
+            for (int i = 0; i < enemyList.Count; i++)
+            {
+                enemyListTemp.Add(enemyList[i]);
+            }
 
             List<Rectangle> shootListTemp = new List<Rectangle>();
 
@@ -475,23 +481,57 @@ namespace HyperHavocSHMUP
                 }
             }
 
-            shootList = shootListTemp;
+            shootList.Clear();
+            for (int i = 0; i < shootListTemp.Count; i++)
+            {
+                shootList.Add(shootListTemp[i]);
+            }
+            
 
             foreach (Rectangle shootLoc in shootList)
             {
-                for (int i = 1; i <= shootListTemp.Count; i++)
+                for (int i = 0; i < shootListTemp.Count; i++)
                 {
                     if (shootListTemp[i] == shootLoc)
                     {
                         shootListTemp.RemoveAt(i);
-                        i--;
+                        if (i != shootListTemp.Count)
+                        {
+                            i--;
+                        }
                     }
                 }
                 shootListTemp.Add(shootLoc);
             }
 
             shootList = shootListTemp;
-            enemyList = enemyListTemp;
+            enemyList.Clear();
+            for (int i = 0; i < enemyListTemp.Count; i++)
+            {
+                enemyList.Add(enemyListTemp[i]);
+            }
+
+            foreach (Enemy enemyDup in enemyList)
+            {
+                for (int i = 0; i < enemyListTemp.Count; i++)
+                {
+                    if (enemyListTemp[i] == enemyDup)
+                    {
+                        enemyListTemp.RemoveAt(i);
+                        if (i != enemyListTemp.Count)
+                        {
+                            i--;
+                        }
+                    }
+                }
+                enemyListTemp.Add(enemyDup);
+            }
+
+            enemyList.Clear();
+            for (int i = 0; i < enemyListTemp.Count; i++)
+            {
+                enemyList.Add(enemyListTemp[i]);
+            }
 
             for (int i = 0; i < shootList.Count; i++)
             {
@@ -506,29 +546,35 @@ namespace HyperHavocSHMUP
                 shootCooldown = 0;
             }
 
-            foreach (Enemy enemy in enemyList)
-            {
-                enemy.Sprites++;
-                switch (enemy.State)
-                {
-                    case "Move":
-                        enemy.Sprites = 0;
-                        break;
-                    case "Shoot":
-                        if (enemy.Sprites > 3)
-                        {
-                            enemy.Sprites = 0;
-                        }
-                        break;
-                    case "Death":
-                        if (enemy.Sprites > 4)
-                        {
-                            enemy.Sprites = 0;
-                        }
-                        break;
-                }
+            //foreach (Enemy enemy in enemyList)
+            //{
+            //    enemy.Sprites++;
+            //    switch (enemy.State)
+            //    {
+            //        case "Move":
+            //            enemy.Sprites = 0;
+            //            break;
+            //        case "Shoot":
+            //            if (enemy.Sprites > 3)
+            //            {
+            //                enemy.Sprites = 0;
+            //            }
+            //            break;
+            //        case "Death":
+            //            if (enemy.Sprites > 4)
+            //            {
+            //                enemy.Sprites = 0;
+            //            }
+            //            break;
+            //    }
 
-                enemyListTemp.Add(enemy);
+            //    enemyListTemp.Add(enemy);
+            //}
+
+            enemyList.Clear();
+            for (int i = 0; i < enemyListTemp.Count; i++)
+            {
+                enemyList.Add(enemyListTemp[i]);
             }
 
             if (enemyList.Count > 0)
