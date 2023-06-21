@@ -162,7 +162,7 @@ namespace HyperHavocSHMUP
                 newEnemy.Body = new Rectangle(800, 50 + (50 * i), 40, 35);
                 newEnemy.Sprites = 0;
                 newEnemy.Sprite = Properties.Resources.enemy_1;
-
+                newEnemy.Health = 5;
 
                 enemyList.Add(newEnemy);
                 enemyList[i].Sprite = Properties.Resources.enemy_1;
@@ -437,6 +437,9 @@ namespace HyperHavocSHMUP
 
             List<Enemy> enemyListTemp = new List<Enemy>();
 
+            List<Rectangle> shootListTemp = new List<Rectangle>();
+
+
             foreach (Rectangle shoot in shootList)
             {
                 if (enemyList.Count > 0)
@@ -445,16 +448,23 @@ namespace HyperHavocSHMUP
                     {
                         if (shoot.IntersectsWith(enemy.Body))
                         {
-                            enemyDeathCounter++;
-                            drawEnemy = enemy_1;
+                            enemy.Health--;
 
-                            if (enemyDeathCounter == 5)
+                        if (enemy.Health == 0)
+                            {
+                                enemy.State = "death";
+                            }
+                            if (enemy.Sprites != 5 && enemy.State == "death")
                             {
 
+                                enemy.Sprites++;
+                                enemyListTemp.Add(enemy);
+                                
                             }
                         }
                         else
                         {
+                            shootListTemp.Add(shoot);
                             enemyListTemp.Add(enemy);
                         }
                     }
