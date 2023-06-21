@@ -11,6 +11,7 @@ using System.IO;
 using System.Media;
 using System.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace HyperHavocSHMUP
 {
@@ -84,9 +85,12 @@ namespace HyperHavocSHMUP
         int fireCounter = 0;
         int enemyDeathCounter = 0;
 
-
         int maxNovaSpeed = 10;
         int attackSpeed = 30;
+        int enemySpeed = 0;
+
+        Random randGen = new Random();
+        int randValue = 0;
 
         //movement bools
         bool aDown = false;
@@ -144,6 +148,8 @@ namespace HyperHavocSHMUP
 
         //text array
         String[] introText = new String[] { "Welcome to the neon-lit streets of NeoHavoc City,", "a place where chaos and pulsating energy reign supreme.", "In the not-so-distant future,", "the world has transformed into a vibrant paradise", "where synthwave beats pump through every fibre of society." };
+        String[] introText2 = new String[] { "The evil AI Overmind, a malevolent force lurking within the heart of the cyberspace network, has unleashed a legion of rogue programs.", "These digital minions, aptly named 'Glitchers' are wreaking havoc, corrupting everything in their path.", "With your trusty mech, the \"Cosmic Crusher,\" you embark on a righteous quest to bring peace and restore order to NeoHavoc City." };
+        String[] introText3 = new String[] { "You are Max Nova,", "an unlikely hero armed with a passion for retro gaming and an impressive arsenal of pixelated firepower.", "As the city plunges into a vortex of psychedelic mayhem,", "it's up to you to save the day, one groovy bullet at a time."};
 
         int shootCooldown;
         public Form1()
@@ -153,21 +159,11 @@ namespace HyperHavocSHMUP
             Enemy newEnemy = new Enemy();
             for (int i = 0; i <= 2; i++)
             {
-                newEnemy.Body = new Rectangle(200, 50 + (50 * i), 40, 40);
+                newEnemy.Body = new Rectangle(800, 50 + (50 * i), 40, 35);
                 newEnemy.Sprites = 0;
                 newEnemy.Sprite = Properties.Resources.enemy_1;
-                if (i == 0)
-                {
-                    newEnemy.State = "Attack";
-                }
-                else if (i == 1)
-                {
-                    newEnemy.State = "Move";
-                }
-                else
-                {
-                    newEnemy.State = "Death";
-                }
+
+
                 enemyList.Add(newEnemy);
                 enemyList[i].Sprite = Properties.Resources.enemy_1;
             }
@@ -286,12 +282,6 @@ namespace HyperHavocSHMUP
 
         public void InitializeIntro()
         {
-
-            /*foreach (string intro in introText)
-            {
-                introLabel.Text += $"{intro}\n";
-            }*/
-
             introTimer.Enabled = true;
 
             titleLabel.Visible = false;
@@ -299,12 +289,13 @@ namespace HyperHavocSHMUP
             backLabel2.Visible = false;
             backLabel3.Visible = false;
             backLabel4.Visible = false;
-            subtitleLabel.Visible = false;
+            subtitleLabel.Text = "Press [Space] to Continue";
 
-            state = "intro";
+           
+
+            state = "intro1";
 
             Refresh();
-
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -332,7 +323,15 @@ namespace HyperHavocSHMUP
                     {
                         InitializeIntro();
                     }
-                    else if (state == "intro")
+                    else if (state == "intro1")
+                    {
+                        state = "intro2";
+                    }
+                    else if (state == "intro2")
+                    {
+                        state = "intro3";
+                    }
+                    else if (state == "intro3")
                     {
                         InitializeGame();
                     }
@@ -436,7 +435,6 @@ namespace HyperHavocSHMUP
                 }
             }
 
-            //List<Rectangle> shootListTemp = new List<Rectangle>();
             List<Enemy> enemyListTemp = new List<Enemy>();
 
             foreach (Rectangle shoot in shootList)
@@ -463,22 +461,11 @@ namespace HyperHavocSHMUP
                 }
             }
 
-            int bullOp = 0;
-            //shootListTemp = new List<Rectangle>();
-            //foreach (Rectangle bullet in shootList)
-            //{
-            //    Rectangle bulletStorer = bullet;
-            //    bulletStorer.X += attackSpeed;
-            //    shootListTemp.Add(bulletStorer);
-            //    bullOp++;
-            //}
-
             for (int i = 0; i < shootList.Count; i++)
             {
                 int x = shootList[i].X + attackSpeed;
                 shootList[i] = new Rectangle(x, shootList[i].Y, shootList[i].Width, shootList[i].Height);
             }
-
 
             shootCooldown--;
 
@@ -548,12 +535,30 @@ namespace HyperHavocSHMUP
                 subtitleLabel.Text = "Press [Space] to Play  Press [Esc] to Exit";
             }
 
-            if (state == "intro")
+            if (state == "intro1")
             {
                 int height = 50;
                 foreach (string intro in introText)
                 {
-                    e.Graphics.DrawString(intro, introFont, magentaBrush, Convert.ToInt16((this.Width - (intro.Count<char>() * 16)) / 6), height);
+                    e.Graphics.DrawString(intro, introFont, magentaBrush, Convert.ToInt16((this.Width - (intro.Count<char>() * 18)) / 6), height);
+                    height += introFont.Height + 5;
+                }
+            }
+            else if (state == "intro2")
+            {
+                int height = 50;
+                foreach (string intro2 in introText2)
+                {
+                    e.Graphics.DrawString(intro2, introFont, magentaBrush, Convert.ToInt16((this.Width - (intro2.Count<char>() * 16)) / 6), height);
+                    height += introFont.Height + 5;
+                }
+            }
+            else if (state == "intro3")
+            {
+                int height = 50;
+                foreach (string intro3 in introText3)
+                {
+                    e.Graphics.DrawString(intro3, introFont, magentaBrush, Convert.ToInt16((this.Width - (intro3.Count<char>() * 16)) / 6), height);
                     height += introFont.Height + 5;
                 }
             }
@@ -590,7 +595,7 @@ namespace HyperHavocSHMUP
                 #endregion
 
 
-               if(enemyList.Count> 0)
+               if(enemyList.Count > 0)
                 {
                     foreach(Enemy enemy in enemyList)
                     {
@@ -611,7 +616,6 @@ namespace HyperHavocSHMUP
 
             }
 
-
             foreach (Rectangle bullet in shootList)
             {
                 e.Graphics.DrawImage(projectile, bullet);
@@ -625,3 +629,8 @@ namespace HyperHavocSHMUP
     }
 
 }
+
+
+//NECESSARY CODE
+//DO NOT REMOVE
+//https://www.youtube.com/watch?v=dQw4w9WgXcQ
