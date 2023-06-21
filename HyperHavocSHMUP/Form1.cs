@@ -149,13 +149,13 @@ namespace HyperHavocSHMUP
         //text array
         String[] introText = new String[] { "Welcome to the neon-lit streets of NeoHavoc City,", "a place where chaos and pulsating energy reign supreme.", "In the not-so-distant future,", "the world has transformed into a vibrant paradise", "where synthwave beats pump through every fibre of society." };
         String[] introText2 = new String[] { "The evil AI Overmind, a malevolent force lurking within the heart of the cyberspace network, has unleashed a legion of rogue programs.", "These digital minions, aptly named 'Glitchers' are wreaking havoc, corrupting everything in their path.", "With your trusty mech, the \"Cosmic Crusher,\" you embark on a righteous quest to bring peace and restore order to NeoHavoc City." };
-        String[] introText3 = new String[] { "You are Max Nova,", "an unlikely hero armed with a passion for retro gaming and an impressive arsenal of pixelated firepower.", "As the city plunges into a vortex of psychedelic mayhem,", "it's up to you to save the day, one groovy bullet at a time."};
+        String[] introText3 = new String[] { "You are Max Nova,", "an unlikely hero armed with a passion for retro gaming and an impressive arsenal of pixelated firepower.", "As the city plunges into a vortex of psychedelic mayhem,", "it's up to you to save the day, one groovy bullet at a time." };
 
         int shootCooldown;
         public Form1()
         {
             InitializeComponent();
-            
+
             Enemy newEnemy = new Enemy();
             for (int i = 0; i <= 2; i++)
             {
@@ -291,7 +291,7 @@ namespace HyperHavocSHMUP
             backLabel4.Visible = false;
             subtitleLabel.Text = "Press [Space] to Continue";
 
-           
+
 
             state = "intro1";
 
@@ -450,7 +450,7 @@ namespace HyperHavocSHMUP
                         {
                             enemy.Health--;
 
-                        if (enemy.Health == 0)
+                            if (enemy.Health == 0)
                             {
                                 enemy.State = "death";
                             }
@@ -459,7 +459,7 @@ namespace HyperHavocSHMUP
 
                                 enemy.Sprites++;
                                 enemyListTemp.Add(enemy);
-                                
+
                             }
                         }
                         else
@@ -469,7 +469,29 @@ namespace HyperHavocSHMUP
                         }
                     }
                 }
+                else
+                {
+                    shootListTemp.Add(shoot);
+                }
             }
+
+            shootList = shootListTemp;
+
+            foreach (Rectangle shootLoc in shootList)
+            {
+                for (int i = 1; i <= shootListTemp.Count; i++)
+                {
+                    if (shootListTemp[i] == shootLoc)
+                    {
+                        shootListTemp.RemoveAt(i);
+                        i--;
+                    }
+                }
+                shootListTemp.Add(shootLoc);
+            }
+
+            shootList = shootListTemp;
+            enemyList = enemyListTemp;
 
             for (int i = 0; i < shootList.Count; i++)
             {
@@ -605,9 +627,9 @@ namespace HyperHavocSHMUP
                 #endregion
 
 
-               if(enemyList.Count > 0)
+                if (enemyList.Count > 0)
                 {
-                    foreach(Enemy enemy in enemyList)
+                    foreach (Enemy enemy in enemyList)
                     {
                         e.Graphics.DrawImage(enemy.Sprite, enemy.Body);
                     }
