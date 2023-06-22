@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-using System.Media;
-using System.Threading;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace HyperHavocSHMUP
 {
@@ -456,15 +447,15 @@ namespace HyperHavocSHMUP
                         {
                             enemy.Health--;
 
-                            if (enemy.Health == 0)
+                            if (enemy.Health == 0 && enemy.State != "Death")
                             {
-                                enemy.State = "death";
+                                enemy.State = "Death";
+                                enemy.Sprites = -1;
                             }
-                            if (enemy.Sprites != 5 && enemy.State == "death")
+                            if (enemy.Sprites < 5 && enemy.State == "Death")
                             {
-
-                                enemy.Sprites++;
                                 enemyListTemp.Add(enemy);
+                                
 
                             }
                         }
@@ -486,7 +477,6 @@ namespace HyperHavocSHMUP
             {
                 shootList.Add(shootListTemp[i]);
             }
-            
 
             foreach (Rectangle shootLoc in shootList)
             {
@@ -546,30 +536,26 @@ namespace HyperHavocSHMUP
                 shootCooldown = 0;
             }
 
-            //foreach (Enemy enemy in enemyList)
-            //{
-            //    enemy.Sprites++;
-            //    switch (enemy.State)
-            //    {
-            //        case "Move":
-            //            enemy.Sprites = 0;
-            //            break;
-            //        case "Shoot":
-            //            if (enemy.Sprites > 3)
-            //            {
-            //                enemy.Sprites = 0;
-            //            }
-            //            break;
-            //        case "Death":
-            //            if (enemy.Sprites > 4)
-            //            {
-            //                enemy.Sprites = 0;
-            //            }
-            //            break;
-            //    }
+            foreach (Enemy enemy in enemyList)
+            {
+                enemy.Sprites++;
+                switch (enemy.State)
+                {
+                    case "Move":
+                        enemy.Sprites = 0;
+                        break;
+                    case "Shoot":
+                        if (enemy.Sprites > 3)
+                        {
+                            enemy.Sprites = 0;
+                        }
+                        break;
+                    default:
+                        break;
+                }
 
-            //    enemyListTemp.Add(enemy);
-            //}
+                enemyListTemp.Add(enemy);
+            }
 
             enemyList.Clear();
             for (int i = 0; i < enemyListTemp.Count; i++)
