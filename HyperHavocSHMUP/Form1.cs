@@ -148,16 +148,15 @@ namespace HyperHavocSHMUP
             InitializeComponent();
 
             Enemy newEnemy = new Enemy();
-            for (int i = 0; i <= 2; i++)
-            {
-                newEnemy.Body = new Rectangle(800, 50 + (50 * i), 40, 35);
-                newEnemy.Sprites = 0;
-                newEnemy.Sprite = Properties.Resources.enemy_1;
-                newEnemy.Health = 5;
 
-                enemyList.Add(newEnemy);
-                enemyList[i].Sprite = Properties.Resources.enemy_1;
-            }
+            newEnemy.Body = new Rectangle(400, 50 + (50 * 0), 40, 35);
+            newEnemy.Sprites = 0;
+            newEnemy.Sprite = Properties.Resources.enemy_1;
+            newEnemy.Health = 5;
+
+            enemyList.Add(newEnemy);
+            enemyList[0].Sprite = Properties.Resources.enemy_1;
+
 
             shootCooldown = Convert.ToInt32(100 / gameTimer.Interval);
 
@@ -428,11 +427,7 @@ namespace HyperHavocSHMUP
                 }
             }
 
-            List<Enemy> enemyListTemp = new List<Enemy>();
-            for (int i = 0; i < enemyList.Count; i++)
-            {
-                enemyListTemp.Add(enemyList[i]);
-            }
+
 
             List<Rectangle> shootListTemp = new List<Rectangle>();
 
@@ -454,15 +449,15 @@ namespace HyperHavocSHMUP
                             }
                             if (enemy.Sprites < 5 && enemy.State == "Death")
                             {
-                                enemyListTemp.Add(enemy);
-                                
+                                //enemyListTemp.Add(enemy);
+
 
                             }
                         }
                         else
                         {
                             shootListTemp.Add(shoot);
-                            enemyListTemp.Add(enemy);
+
                         }
                     }
                 }
@@ -495,33 +490,7 @@ namespace HyperHavocSHMUP
             }
 
             shootList = shootListTemp;
-            enemyList.Clear();
-            for (int i = 0; i < enemyListTemp.Count; i++)
-            {
-                enemyList.Add(enemyListTemp[i]);
-            }
 
-            foreach (Enemy enemyDup in enemyList)
-            {
-                for (int i = 0; i < enemyListTemp.Count; i++)
-                {
-                    if (enemyListTemp[i] == enemyDup)
-                    {
-                        enemyListTemp.RemoveAt(i);
-                        if (i != enemyListTemp.Count)
-                        {
-                            i--;
-                        }
-                    }
-                }
-                enemyListTemp.Add(enemyDup);
-            }
-
-            enemyList.Clear();
-            for (int i = 0; i < enemyListTemp.Count; i++)
-            {
-                enemyList.Add(enemyListTemp[i]);
-            }
 
             for (int i = 0; i < shootList.Count; i++)
             {
@@ -554,14 +523,10 @@ namespace HyperHavocSHMUP
                         break;
                 }
 
-                enemyListTemp.Add(enemy);
+
             }
 
-            enemyList.Clear();
-            for (int i = 0; i < enemyListTemp.Count; i++)
-            {
-                enemyList.Add(enemyListTemp[i]);
-            }
+
 
             if (enemyList.Count > 0)
             {
@@ -576,8 +541,17 @@ namespace HyperHavocSHMUP
                             enemy.Sprite = enemyAttack[enemy.Sprites];
                             break;
                         case "Death":
-                            enemy.Sprite = enemyDeath[enemy.Sprites];
-                            break;
+                            if (enemy.Sprites == 5)
+                            {
+                                enemyList.Remove(enemy);
+                                // enemy.Sprites = 0;
+                                return;
+                            }
+                            else
+                            {
+                                enemy.Sprite = enemyDeath[enemy.Sprites];
+                                break;
+                            }
                     }
                 }
             }
