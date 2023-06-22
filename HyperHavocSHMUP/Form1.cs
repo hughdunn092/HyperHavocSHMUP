@@ -11,7 +11,7 @@ namespace HyperHavocSHMUP
         System.Windows.Media.MediaPlayer titleMusic = new System.Windows.Media.MediaPlayer();
         System.Windows.Media.MediaPlayer gameMusic = new System.Windows.Media.MediaPlayer();
 
-
+        //enemy class
         public class Enemy
         {
             public Rectangle Body = new Rectangle();
@@ -24,9 +24,6 @@ namespace HyperHavocSHMUP
 
         //player
         Rectangle maxNova = new Rectangle(100, 170, 55, 55);
-
-        //enemy
-        Rectangle baseEnemy = new Rectangle(500, 50, 40, 32);
 
         List<Rectangle> shootList = new List<Rectangle>();
         List<Enemy> enemyList = new List<Enemy>();
@@ -74,7 +71,6 @@ namespace HyperHavocSHMUP
 
         int flightCounter = 0;
         int fireCounter = 0;
-        int enemyDeathCounter = 0;
 
         int maxNovaSpeed = 10;
         int attackSpeed = 30;
@@ -139,8 +135,8 @@ namespace HyperHavocSHMUP
 
         //text array
         String[] introText = new String[] { "Welcome to the neon-lit streets of NeoHavoc City,", "a place where chaos and pulsating energy reign supreme.", "In the not-so-distant future,", "the world has transformed into a vibrant paradise", "where synthwave beats pump through every fibre of society." };
-        String[] introText2 = new String[] { "The evil AI Overmind, a malevolent force lurking within the heart of the cyberspace network, has unleashed a legion of rogue programs.", "These digital minions, aptly named 'Glitchers' are wreaking havoc, corrupting everything in their path.", "With your trusty mech, the \"Cosmic Crusher,\" you embark on a righteous quest to bring peace and restore order to NeoHavoc City." };
-        String[] introText3 = new String[] { "You are Max Nova,", "an unlikely hero armed with a passion for retro gaming and an impressive arsenal of pixelated firepower.", "As the city plunges into a vortex of psychedelic mayhem,", "it's up to you to save the day, one groovy bullet at a time." };
+        String[] introText2 = new String[] { "The evil AI Overmind, a malevolent force lurking within the heart of the cyberspace network,", "has unleashed a legion of rogue programs.", "These digital minions, named 'Glitchers' are wreaking havoc,", "corrupting everything in their path.", "With your trusty mech, the 'Cosmic Crusher,'", "you embark on a righteous quest to bring peace and restore order to NeoHavoc City." };
+        String[] introText3 = new String[] { "You are Max Nova,", "an unlikely hero armed with a passion for retro gaming,", "and an impressive arsenal of pixelated firepower.", "As the city plunges into a vortex of psychedelic mayhem,", "it's up to you to save the day,", "one groovy bullet at a time." };
 
         int shootCooldown;
         public Form1()
@@ -149,7 +145,7 @@ namespace HyperHavocSHMUP
 
             Enemy newEnemy = new Enemy();
 
-            newEnemy.Body = new Rectangle(400, 50 + (50 * 0), 40, 35);
+            newEnemy.Body = new Rectangle(450, 300, 40, 35);
             newEnemy.Sprites = 0;
             newEnemy.Sprite = Properties.Resources.enemy_1;
             newEnemy.Health = 5;
@@ -253,9 +249,6 @@ namespace HyperHavocSHMUP
             BackColor = Color.Plum;
             maxNova = new Rectangle(100, 170, 55, 55);
 
-
-            baseEnemy = new Rectangle(200, 150, 20, 20);
-
             //remove title screen
             titleLabel.Text = "";
             backLabel1.Text = "";
@@ -356,7 +349,6 @@ namespace HyperHavocSHMUP
                 case Keys.Enter:
                     enterDown = false;
                     break;
-
             }
         }
 
@@ -402,7 +394,6 @@ namespace HyperHavocSHMUP
                 {
                     flightCounter = 0;
                 }
-
             }
             if (enterDown == true)
             {
@@ -427,10 +418,7 @@ namespace HyperHavocSHMUP
                 }
             }
 
-
-
             List<Rectangle> shootListTemp = new List<Rectangle>();
-
 
             foreach (Rectangle shoot in shootList)
             {
@@ -447,12 +435,6 @@ namespace HyperHavocSHMUP
                                 enemy.State = "Death";
                                 enemy.Sprites = -1;
                             }
-                            if (enemy.Sprites < 5 && enemy.State == "Death")
-                            {
-                                //enemyListTemp.Add(enemy);
-
-
-                            }
                         }
                         else
                         {
@@ -460,11 +442,7 @@ namespace HyperHavocSHMUP
 
                         }
                     }
-                }
-                else
-                {
-                    shootListTemp.Add(shoot);
-                }
+                }   
             }
 
             shootList.Clear();
@@ -522,11 +500,7 @@ namespace HyperHavocSHMUP
                     default:
                         break;
                 }
-
-
             }
-
-
 
             if (enemyList.Count > 0)
             {
@@ -667,7 +641,6 @@ namespace HyperHavocSHMUP
     }
 
 }
-
 
 //NECESSARY CODE
 //DO NOT REMOVE
