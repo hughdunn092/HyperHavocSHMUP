@@ -11,7 +11,10 @@ namespace HyperHavocSHMUP
         System.Windows.Media.MediaPlayer titleMusic = new System.Windows.Media.MediaPlayer();
         System.Windows.Media.MediaPlayer gameMusic = new System.Windows.Media.MediaPlayer();
 
-        //enemy class
+        //creating a new label for the intro
+        Label title = new Label();
+
+        //enemy class (I don't like it)
         public class Enemy
         {
             public Rectangle Body = new Rectangle();
@@ -67,14 +70,13 @@ namespace HyperHavocSHMUP
         SolidBrush magentaBrush = new SolidBrush(Color.Magenta);
         SolidBrush bulletBrush = new SolidBrush(Color.Transparent);
         Font introFont = new Font("OCR A Extended", 16, FontStyle.Bold);
-        //SolidBrush attackBrush = new SolidBrush(Color.DeepPink);
 
         int flightCounter = 0;
         int fireCounter = 0;
 
         int maxNovaSpeed = 10;
         int attackSpeed = 30;
-        int enemySpeed = 0;
+        int enemySpeed = 15;
 
         Random randGen = new Random();
         int randValue = 0;
@@ -133,11 +135,6 @@ namespace HyperHavocSHMUP
         Image[] enemyDeath = new Image[5];
         #endregion
 
-        //text array
-        String[] introText = new String[] { "Welcome to the neon-lit streets of NeoHavoc City,", "a place where chaos and pulsating energy reign supreme.", "In the not-so-distant future,", "the world has transformed into a vibrant paradise", "where synthwave beats pump through every fibre of society." };
-        String[] introText2 = new String[] { "The evil AI Overmind, a malevolent force lurking within the heart of the cyberspace network,", "has unleashed a legion of rogue programs.", "These digital minions, named 'Glitchers' are wreaking havoc,", "corrupting everything in their path.", "With your trusty mech, the 'Cosmic Crusher,'", "you embark on a righteous quest to bring peace and restore order to NeoHavoc City." };
-        String[] introText3 = new String[] { "You are Max Nova,", "an unlikely hero armed with a passion for retro gaming,", "and an impressive arsenal of pixelated firepower.", "As the city plunges into a vortex of psychedelic mayhem,", "it's up to you to save the day,", "one groovy bullet at a time." };
-
         int shootCooldown;
         public Form1()
         {
@@ -145,6 +142,9 @@ namespace HyperHavocSHMUP
 
             Enemy newEnemy = new Enemy();
 
+            this.Controls.Add(title);
+
+            //defing the stuff from the enemy class
             newEnemy.Body = new Rectangle(450, 300, 40, 35);
             newEnemy.Sprites = 0;
             newEnemy.Sprite = Properties.Resources.enemy_1;
@@ -220,6 +220,7 @@ namespace HyperHavocSHMUP
             drawPlayer = playerBase1;
             #endregion
 
+            //defining the music
             titleMusic.Open(new Uri(Application.StartupPath + "/Resources/titlemusic.wav"));
             titleMusic.MediaEnded += new EventHandler(titleMusic_MediaEnded);
             titleMusic.Play();
@@ -228,22 +229,25 @@ namespace HyperHavocSHMUP
 
         private void titleMusic_MediaEnded(object sender, EventArgs e)
         {
+            //starting the title screen music
             titleMusic.Stop();
             titleMusic.Play();
         }
 
         private void gameMusic_MediaEnded(object sender, EventArgs e)
         {
+            //starting the game music
             gameMusic.Stop();
             gameMusic.Play();
         }
 
         public void InitializeGame()
         {
-
+            //sets up screen for the gameplay (the definition for gameplay is very loose)
             gameMusic.Open(new Uri(Application.StartupPath + "/Resources/gameplaymusic.wav"));
             gameMusic.MediaEnded += new EventHandler(gameMusic_MediaEnded);
 
+            title.Visible = false;
             titleMusic.Stop();
             gameMusic.Play();
             BackColor = Color.Plum;
@@ -265,6 +269,7 @@ namespace HyperHavocSHMUP
 
         public void InitializeIntro()
         {
+            //sets up screen for the intro text
             introTimer.Enabled = true;
 
             titleLabel.Visible = false;
@@ -273,8 +278,6 @@ namespace HyperHavocSHMUP
             backLabel3.Visible = false;
             backLabel4.Visible = false;
             subtitleLabel.Text = "Press [Space] to Continue";
-
-
 
             state = "intro1";
 
@@ -301,6 +304,7 @@ namespace HyperHavocSHMUP
                     enterDown = true;
                     break;
 
+                //starting the game
                 case Keys.Space:
                     if (state == "waiting" || state == "end")
                     {
@@ -354,6 +358,9 @@ namespace HyperHavocSHMUP
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            #region movement
+            //movement code
+
             if (dDown == true && maxNova.X < this.Width - maxNova.Width - 550)
             {
                 maxNova.X += maxNovaSpeed;
@@ -394,12 +401,16 @@ namespace HyperHavocSHMUP
                 {
                     flightCounter = 0;
                 }
+                #endregion
             }
+
+            //attack
             if (enterDown == true)
             {
                 drawPlayer = shoot1;
                 fireCounter++;
 
+                //shooting cool down
                 if (shootCooldown == 0)
                 {
                     shootList.Add(new Rectangle(maxNova.X + maxNova.Width, maxNova.Y + (maxNova.Height / 2), 13, 10));
@@ -418,8 +429,10 @@ namespace HyperHavocSHMUP
                 }
             }
 
+            //this is the bane of everyone's existence 
             List<Rectangle> shootListTemp = new List<Rectangle>();
 
+            //horrible, terrible, awful grady code. tried getting rid of it. the replacement does not work. 
             foreach (Rectangle shoot in shootList)
             {
                 if (enemyList.Count > 0)
@@ -442,7 +455,7 @@ namespace HyperHavocSHMUP
 
                         }
                     }
-                }   
+                }
             }
 
             shootList.Clear();
@@ -518,7 +531,6 @@ namespace HyperHavocSHMUP
                             if (enemy.Sprites == 5)
                             {
                                 enemyList.Remove(enemy);
-                                // enemy.Sprites = 0;
                                 return;
                             }
                             else
@@ -530,13 +542,23 @@ namespace HyperHavocSHMUP
                 }
             }
 
+            for (int i = 0; i < shootList.Count; i++)
+            {
+                if (shootList[i].Y >= this.Width)
+                {
+                    shootList.RemoveAt(i);
+                }
+            }
+
             //redraw the screen
             Refresh();
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            #region lore
 
+            //writing all of the VERY NECESSARY lore
             if (state == "waiting")
             {
                 titleLabel.Text = "HYPER HAVOC";
@@ -549,34 +571,42 @@ namespace HyperHavocSHMUP
 
             if (state == "intro1")
             {
-                int height = 50;
-                foreach (string intro in introText)
-                {
-                    e.Graphics.DrawString(intro, introFont, magentaBrush, Convert.ToInt16((this.Width - (intro.Count<char>() * 18)) / 6), height);
-                    height += introFont.Height + 5;
-                }
+                title.TextAlign = ContentAlignment.MiddleCenter;
+                title.Location = new Point(this.Width / 6 - 10, this.Height / 25 - 35);
+                title.Font = new Font(introFont, FontStyle.Bold);
+                title.ForeColor = Color.Magenta;
+                title.Text = "Welcome to the neon-lit streets of NeoHavoc City, \n a place where chaos and pulsating energy reign supreme. \n In the not-so-distant future, the world has transformed into a vibrant paradise, where synthwave beats pump through every fibre of society.";
+                title.Size = new Size(800, 500);
+                title.Visible = true;
+                title.BackColor = Color.Transparent;
             }
             else if (state == "intro2")
             {
-                int height = 50;
-                foreach (string intro2 in introText2)
-                {
-                    e.Graphics.DrawString(intro2, introFont, magentaBrush, Convert.ToInt16((this.Width - (intro2.Count<char>() * 16)) / 6), height);
-                    height += introFont.Height + 5;
-                }
+                title.TextAlign = ContentAlignment.MiddleCenter;
+                title.Location = new Point(this.Width / 6 - 10, this.Height / 25 - 35);
+                title.Font = new Font(introFont, FontStyle.Bold);
+                title.ForeColor = Color.Magenta;
+                title.Text = "The evil AI Overmind, a malevolent force lurking within the heart of the cyberspace network, has unleashed a legion of rogue programs. \n These digital minions, named 'Glitchers' are wreaking havoc, corrupting everything in their path. \n With your trusty mech, the 'Cosmic Crusher,' you embark on a righteous quest to bring peace and restore order to NeoHavoc City.";
+                title.Size = new Size(800, 500);
+                title.Visible = true;
+                title.BackColor = Color.Transparent;
             }
             else if (state == "intro3")
             {
-                int height = 50;
-                foreach (string intro3 in introText3)
-                {
-                    e.Graphics.DrawString(intro3, introFont, magentaBrush, Convert.ToInt16((this.Width - (intro3.Count<char>() * 16)) / 6), height);
-                    height += introFont.Height + 5;
-                }
+                title.TextAlign = ContentAlignment.MiddleCenter;
+                title.Location = new Point(this.Width / 6 - 10, this.Height / 25 - 35);
+                title.Font = new Font(introFont, FontStyle.Bold);
+                title.ForeColor = Color.Magenta;
+                title.Text = "You are Max Nova an unlikely hero armed with a passion for retro gaming and an impressive arsenal of pixelated firepower. \n As the city plunges into a vortex of psychedelic mayhem, it's up to you to save the day, \n one groovy bullet at a time.";
+                title.Size = new Size(800, 500);
+                title.Visible = true;
+                title.BackColor = Color.Transparent;
             }
+            #endregion
 
             if (state == "playing")
             {
+
                 #region Drawing Rectangles
                 //far buildings
                 e.Graphics.FillRectangle(indigoBrush, background1_3);
