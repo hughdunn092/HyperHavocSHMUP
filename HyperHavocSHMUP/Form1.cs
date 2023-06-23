@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Windows.Forms;
 
 namespace HyperHavocSHMUP
@@ -407,14 +408,20 @@ namespace HyperHavocSHMUP
             //attack
             if (enterDown == true)
             {
+                SoundPlayer shootplayer = new SoundPlayer(Properties.Resources.shootsound);
+                shootplayer.Play();
+
+
                 drawPlayer = shoot1;
                 fireCounter++;
+
 
                 //shooting cool down
                 if (shootCooldown == 0)
                 {
                     shootList.Add(new Rectangle(maxNova.X + maxNova.Width, maxNova.Y + (maxNova.Height / 2), 13, 10));
                     shootCooldown = Convert.ToInt32(100 / gameTimer.Interval);
+
                 }
 
                 //recoil
@@ -445,6 +452,8 @@ namespace HyperHavocSHMUP
 
                             if (enemy.Health == 0 && enemy.State != "Death")
                             {
+                                SoundPlayer expplayer = new SoundPlayer(Properties.Resources.enemyexplosion);
+                                expplayer.Play();
                                 enemy.State = "Death";
                                 enemy.Sprites = -1;
                             }
